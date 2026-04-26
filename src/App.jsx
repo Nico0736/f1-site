@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import Section from './components/Section'
 import { calendar, champions, currentDrivers, historyMilestones, news } from './components/data'
 
@@ -13,9 +13,9 @@ const navItems = [
 ]
 
 const liveFeed = [
-  { lap: 1,  text: '🚦 Feux rouges éteints — DÉPART !', event: true },
-  { lap: 4,  text: 'Norris prend la tête devant Piastri au virage 1.', event: false },
-  { lap: 8,  text: 'Verstappen remonte de la 4e à la 2e place.', event: false },
+  { lap: 1, text: '🚦 Feux rouges éteints — DÉPART !', event: true },
+  { lap: 4, text: 'Norris prend la tête devant Piastri au virage 1.', event: false },
+  { lap: 8, text: 'Verstappen remonte de la 4e à la 2e place.', event: false },
   { lap: 12, text: '🟡 DRAPEAU JAUNE — débris signalés virage 7.', event: true },
   { lap: 18, text: 'Pit stop éclair pour Leclerc — 2.4s, pneus mediums.', event: false },
   { lap: 24, text: '🚗 SAFETY CAR déployée — incident en fond de grille.', event: true },
@@ -26,31 +26,186 @@ const liveFeed = [
   { lap: 57, text: '🏁 DRAPEAU À DAMIER — Norris remporte le GP de Miami !', event: true },
 ]
 
+function F1Car() {
+  return (
+    <div className="relative w-full h-32 overflow-hidden">
+      <div className="absolute inset-0 flex items-center">
+        <div className="w-full h-px bg-zinc-800" />
+      </div>
+      <div className="absolute inset-0 flex items-center animate-[race_4s_linear_infinite]">
+        <svg width="200" height="60" viewBox="0 0 200 60" className="drop-shadow-lg">
+          {/* Corps principal */}
+          <ellipse cx="100" cy="35" rx="85" ry="12" fill="#E10600" />
+          <rect x="30" y="25" width="140" height="14" rx="7" fill="#cc0500" />
+          {/* Cockpit */}
+          <ellipse cx="100" cy="28" rx="32" ry="10" fill="#1a1a1a" />
+          <rect x="72" y="20" width="56" height="10" rx="4" fill="#222" />
+          {/* Aileron avant */}
+          <rect x="8" y="32" width="28" height="5" rx="2" fill="#E10600" />
+          <rect x="4" y="30" width="8" height="9" rx="1" fill="#cc0500" />
+          {/* Aileron arrière */}
+          <rect x="164" y="26" width="28" height="5" rx="2" fill="#E10600" />
+          <rect x="188" y="24" width="8" height="9" rx="1" fill="#cc0500" />
+          {/* Roue avant gauche */}
+          <g style={{ transformOrigin: '45px 44px', animation: 'spin 0.3s linear infinite' }}>
+            <circle cx="45" cy="44" r="10" fill="#111" stroke="#555" strokeWidth="2" />
+            <circle cx="45" cy="44" r="5" fill="#333" />
+            <line x1="45" y1="34" x2="45" y2="54" stroke="#666" strokeWidth="1.5" />
+            <line x1="35" y1="44" x2="55" y2="44" stroke="#666" strokeWidth="1.5" />
+          </g>
+          {/* Roue avant droite */}
+          <g style={{ transformOrigin: '45px 26px', animation: 'spin 0.3s linear infinite' }}>
+            <circle cx="45" cy="26" r="10" fill="#111" stroke="#555" strokeWidth="2" />
+            <circle cx="45" cy="26" r="5" fill="#333" />
+            <line x1="45" y1="16" x2="45" y2="36" stroke="#666" strokeWidth="1.5" />
+            <line x1="35" y1="26" x2="55" y2="26" stroke="#666" strokeWidth="1.5" />
+          </g>
+          {/* Roue arrière gauche */}
+          <g style={{ transformOrigin: '155px 44px', animation: 'spin 0.3s linear infinite' }}>
+            <circle cx="155" cy="44" r="12" fill="#111" stroke="#555" strokeWidth="2" />
+            <circle cx="155" cy="44" r="6" fill="#333" />
+            <line x1="155" y1="32" x2="155" y2="56" stroke="#666" strokeWidth="1.5" />
+            <line x1="143" y1="44" x2="167" y2="44" stroke="#666" strokeWidth="1.5" />
+          </g>
+          {/* Roue arrière droite */}
+          <g style={{ transformOrigin: '155px 26px', animation: 'spin 0.3s linear infinite' }}>
+            <circle cx="155" cy="26" r="12" fill="#111" stroke="#555" strokeWidth="2" />
+            <circle cx="155" cy="26" r="6" fill="#333" />
+            <line x1="155" y1="14" x2="155" y2="38" stroke="#666" strokeWidth="1.5" />
+            <line x1="143" y1="26" x2="167" y2="26" stroke="#666" strokeWidth="1.5" />
+          </g>
+          {/* Halo */}
+          <path d="M80 22 Q100 16 120 22" fill="none" stroke="#444" strokeWidth="3" />
+          {/* Flammes échappement */}
+          <ellipse cx="18" cy="35" rx="8" ry="3" fill="#ff6600" opacity="0.8" />
+          <ellipse cx="12" cy="35" rx="5" ry="2" fill="#ffaa00" opacity="0.6" />
+        </svg>
+        {/* Traînée de vitesse */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-32 h-px bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50" />
+      </div>
+      <style>{`
+        @keyframes race {
+          0% { left: -220px; }
+          100% { left: calc(100% + 50px); }
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  )
+}
+
+function DriverCard({ driver, onClick }) {
+  return (
+    <article
+      onClick={() => onClick(driver)}
+      className="group rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 hover:border-raceRed/50 transition-all duration-200 cursor-pointer"
+    >
+      <div className="flex items-center gap-3 mb-3">
+        <div className="relative">
+          <img
+            src={driver.photo}
+            alt={driver.name}
+            className="w-12 h-12 rounded-full object-cover border-2 border-zinc-700 group-hover:border-raceRed transition-colors"
+            onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(driver.name)}&background=E10600&color=fff&size=48` }}
+          />
+          <div className="absolute -bottom-1 -right-1 bg-raceRed text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center leading-none">
+            {driver.num}
+          </div>
+        </div>
+        <div>
+          <h3 className="text-sm font-bold text-white leading-tight">{driver.name}</h3>
+          <p className="text-xs text-zinc-500">{driver.country}</p>
+        </div>
+      </div>
+      <p className="text-xs text-zinc-400 bg-zinc-800/50 rounded-lg px-3 py-1.5">{driver.team}</p>
+      <p className="text-xs text-zinc-600 mt-2 text-center">Cliquer pour la biographie →</p>
+    </article>
+  )
+}
+
+function DriverModal({ driver, onClose }) {
+  if (!driver) return null
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-zinc-900 border border-zinc-700 rounded-3xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="flex items-start gap-4 mb-4">
+          <img
+            src={driver.photo}
+            alt={driver.name}
+            className="w-20 h-20 rounded-2xl object-cover border-2 border-raceRed"
+            onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(driver.name)}&background=E10600&color=fff&size=80` }}
+          />
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-2xl font-black text-raceRed">#{driver.num}</span>
+              <h2 className="text-lg font-black text-white">{driver.name}</h2>
+            </div>
+            <p className="text-sm text-zinc-400">{driver.team}</p>
+            <p className="text-xs text-zinc-500">{driver.country} · Né en {driver.born}</p>
+            {driver.titles > 0 && (
+              <div className="mt-1 inline-flex items-center gap-1 bg-raceRed/15 text-raceRed text-xs px-2 py-0.5 rounded-full">
+                🏆 {driver.titles} titre{driver.titles > 1 ? 's' : ''} mondial{driver.titles > 1 ? 'aux' : ''}
+              </div>
+            )}
+          </div>
+          <button onClick={onClose} className="text-zinc-500 hover:text-white text-xl leading-none">✕</button>
+        </div>
+        <div className="border-t border-zinc-800 pt-4 mb-4">
+          <p className="text-sm text-zinc-300 leading-relaxed">{driver.bio}</p>
+        </div>
+        <div className="border-t border-zinc-800 pt-4">
+          <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Équipes précédentes</p>
+          <div className="flex flex-wrap gap-2">
+            {driver.teams.map((t, i) => (
+              <span key={i} className="text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded-lg">{t}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const [activeNav, setActiveNav] = useState('accueil')
   const [liveOn, setLiveOn] = useState(false)
   const [liveIndex, setLiveIndex] = useState(0)
   const [lap, setLap] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [selectedDriver, setSelectedDriver] = useState(null)
+  const [liveInterval, setLiveInterval] = useState(null)
 
-  useEffect(() => {
-    if (!liveOn) return
-    const timer = setInterval(() => {
-      setLiveIndex((prev) => {
-        if (prev >= liveFeed.length - 1) { setLiveOn(false); return prev }
+  const startLive = () => {
+    setLiveIndex(0)
+    setLap(0)
+    setLiveOn(true)
+    const interval = setInterval(() => {
+      setLiveIndex(prev => {
+        if (prev >= liveFeed.length - 1) {
+          clearInterval(interval)
+          setLiveOn(false)
+          return prev
+        }
         return prev + 1
       })
-      setLap((prev) => Math.min(prev + 2, 57))
+      setLap(prev => Math.min(prev + 2, 57))
     }, 2200)
-    return () => clearInterval(timer)
-  }, [liveOn])
+    setLiveInterval(interval)
+  }
 
-  const startLive = () => { setLiveIndex(0); setLap(0); setLiveOn(true) }
-  const visibleFeed = useMemo(() => liveFeed.slice(0, liveIndex + 1).reverse(), [liveIndex])
+  const stopLive = () => {
+    clearInterval(liveInterval)
+    setLiveOn(false)
+  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
-      <header className="sticky top-0 z-50 border-b-2 border-raceRed bg-black/90 backdrop-blur-md">
+      {selectedDriver && <DriverModal driver={selectedDriver} onClose={() => setSelectedDriver(null)} />}
+
+      <header className="sticky top-0 z-40 border-b-2 border-raceRed bg-black/90 backdrop-blur-md">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
           <a href="#accueil" className="text-xl font-black tracking-widest text-raceRed uppercase">F1<span className="text-white">Hub</span></a>
           <ul className="hidden gap-1 md:flex">
@@ -65,7 +220,7 @@ export default function App() {
           </ul>
           <button className="md:hidden text-zinc-300" onClick={() => setMenuOpen(!menuOpen)}>
             <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
-              {menuOpen ? <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round"/> : <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round"/>}
+              {menuOpen ? <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" /> : <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" />}
             </svg>
           </button>
         </nav>
@@ -80,25 +235,27 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 pb-16 md:px-8">
+
         <Section id="accueil" title="">
-          <div className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black p-8 md:p-14 mb-10">
+          <div className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black p-8 md:p-14 mb-6">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(225,6,0,0.25),transparent_60%)]" />
-            <div className="relative">
+            <div className="relative mb-8">
               <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-raceRed">Saison 2026</p>
               <h1 className="mb-5 text-4xl font-black leading-tight md:text-6xl">La <span className="text-raceRed">Formule 1</span><br />à portée de main</h1>
               <p className="mb-8 max-w-xl text-zinc-400">Résultats, pilotes, histoire, live GP et calendrier — tout en un.</p>
               <div className="flex flex-wrap gap-3">
-                <a href="#live" className="rounded-xl bg-raceRed px-6 py-3 text-sm font-bold text-white hover:bg-red-700 uppercase tracking-wider">Suivre le Live GP</a>
-                <a href="#calendrier" className="rounded-xl border border-zinc-600 px-6 py-3 text-sm font-bold text-zinc-200 hover:border-zinc-400 uppercase tracking-wider">Calendrier 2026</a>
+                <a href="#live" className="rounded-xl bg-raceRed px-6 py-3 text-sm font-bold text-white hover:bg-red-700 uppercase tracking-wider transition-colors">Suivre le Live GP</a>
+                <a href="#calendrier" className="rounded-xl border border-zinc-600 px-6 py-3 text-sm font-bold text-zinc-200 hover:border-zinc-400 uppercase tracking-wider transition-colors">Calendrier 2026</a>
               </div>
             </div>
+            <F1Car />
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { label: 'Prochain GP', value: 'Miami', sub: '4 Mai 2026' },
-              { label: 'Leader championnat', value: 'L. Norris', sub: 'McLaren · 94 pts' },
-              { label: 'Constructeurs', value: 'McLaren', sub: '168 pts · 1er' },
-              { label: 'Dernier vainqueur', value: 'O. Piastri', sub: 'GP de Chine' },
+              { label: 'Prochain GP', value: 'Miami', sub: '3 Mai 2026' },
+              { label: 'Champion 2025', value: 'L. Norris', sub: 'McLaren' },
+              { label: 'Constructeurs 2025', value: 'McLaren', sub: 'Titre consécutif' },
+              { label: 'Vainqueur Chine', value: 'K. Antonelli', sub: 'Mercedes' },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5">
                 <p className="text-xs text-zinc-500 uppercase tracking-widest mb-1">{s.label}</p>
@@ -123,21 +280,10 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="pilotes" title="Pilotes 2026">
+        <Section id="pilotes" title="Pilotes 2026 — Cliquez pour la biographie">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {currentDrivers.map((driver) => (
-              <article key={driver.name} className="group rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 hover:border-raceRed/50 transition-all">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-raceRed/10 border border-raceRed/20">
-                    <span className="text-xs font-black text-raceRed">#{driver.number ?? driver.num ?? '?'}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">{driver.name}</h3>
-                    <p className="text-xs text-zinc-500">{driver.country}</p>
-                  </div>
-                </div>
-                <p className="text-xs text-zinc-400 bg-zinc-800/50 rounded-lg px-3 py-1.5">{driver.team}</p>
-              </article>
+              <DriverCard key={driver.num} driver={driver} onClick={setSelectedDriver} />
             ))}
           </div>
         </Section>
@@ -203,9 +349,9 @@ export default function App() {
                 {liveOn ? 'En cours...' : 'Lancer le live'}
               </button>
               {liveOn && (
-                <button onClick={() => setLiveOn(false)}
+                <button onClick={stopLive}
                   className="rounded-xl border border-zinc-600 px-5 py-2.5 text-sm font-bold text-zinc-300 hover:border-zinc-400">
-                  Pause
+                  Arrêter
                 </button>
               )}
             </div>
@@ -213,7 +359,7 @@ export default function App() {
               {liveIndex === 0 && !liveOn ? (
                 <p className="text-center text-sm text-zinc-600 py-8">Appuyez sur "Lancer le live" pour démarrer</p>
               ) : (
-                visibleFeed.map((msg, idx) => (
+                liveFeed.slice(0, liveIndex + 1).reverse().map((msg, idx) => (
                   <div key={idx} className={`rounded-xl px-4 py-2.5 text-sm border ${msg.event ? 'border-raceRed/30 bg-raceRed/5 text-white' : 'border-zinc-800 bg-black/30 text-zinc-300'}`}>
                     <span className="text-zinc-600 text-xs mr-2">Tour {msg.lap}</span>{msg.text}
                   </div>
@@ -223,27 +369,44 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="calendrier" title="Calendrier 2026">
-          <div className="grid gap-3 lg:grid-cols-2">
+        <Section id="calendrier" title="Calendrier 2026 — 22 Grands Prix">
+          <div className="grid gap-4 lg:grid-cols-2">
             {calendar.map((race, i) => (
-              <article key={race.gp} className={`rounded-2xl border p-4 flex items-center gap-4 transition-all ${race.status === 'Prochain' ? 'border-raceRed bg-raceRed/5' : race.status === 'Terminé' ? 'border-zinc-800 bg-zinc-900/30 opacity-60' : 'border-zinc-800 bg-zinc-900/50 hover:border-zinc-700'}`}>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-800 text-xs font-black text-zinc-400 flex-shrink-0">R{i + 1}</div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-white text-sm truncate">{race.gp}</h3>
-                  <p className="text-xs text-zinc-500 truncate">{race.circuit}</p>
+              <article key={race.gp} className={`rounded-2xl border overflow-hidden transition-all ${race.status === 'Prochain' ? 'border-raceRed' : race.status === 'Terminé' ? 'border-zinc-800 opacity-70' : 'border-zinc-800 hover:border-zinc-700'}`}>
+                <div className="relative h-28 overflow-hidden">
+                  <img
+                    src={race.photo}
+                    alt={race.circuit}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                  <div className="absolute bottom-2 left-3">
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${race.status === 'Prochain' ? 'bg-raceRed text-white' : race.status === 'Terminé' ? 'bg-zinc-700 text-zinc-400' : 'bg-zinc-800 text-zinc-400'}`}>
+                      {race.status}
+                    </span>
+                  </div>
+                  <div className="absolute top-2 right-2 bg-black/60 text-zinc-400 text-xs px-2 py-0.5 rounded-full">
+                    R{i + 1}
+                  </div>
                 </div>
-                <div className="text-right flex-shrink-0">
-                  <p className="text-xs text-zinc-400 mb-1">{new Date(race.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</p>
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${race.status === 'Prochain' ? 'bg-raceRed text-white' : race.status === 'Terminé' ? 'bg-zinc-800 text-zinc-500' : 'bg-zinc-800 text-zinc-400'}`}>{race.status}</span>
+                <div className="p-3 bg-zinc-900">
+                  <h3 className="font-bold text-white text-sm">{race.gp}</h3>
+                  <p className="text-xs text-zinc-500">{race.circuit}</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <p className="text-xs text-zinc-400">{race.location}</p>
+                    <p className="text-xs text-zinc-400">{new Date(race.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</p>
+                  </div>
                 </div>
               </article>
             ))}
           </div>
         </Section>
+
       </main>
 
       <footer className="border-t border-zinc-800 py-6 text-center text-xs text-zinc-600">
-        F1Hub 2026 · Construit avec React + Tailwind
+        F1Hub 2026 · Construit avec React + Tailwind · Données vérifiées
       </footer>
     </div>
   )
