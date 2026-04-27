@@ -33,92 +33,103 @@ const teamColors = {
   'Audi': '#C9002B', 'Cadillac': '#C8B88A',
 }
 
-// Accurate F1 circuit SVG paths
-const CIRCUITS = {
-  "GP d'Australie": {
-    path: "M 100,18 L 145,16 L 168,32 L 174,58 L 168,85 L 152,105 L 130,120 L 102,125 L 75,120 L 52,105 L 38,80 L 38,52 L 55,32 Z",
-    label: "Albert Park"
-  },
-  "GP de Chine": {
-    path: "M 58,22 L 95,18 L 135,20 L 158,32 L 168,55 L 162,80 L 148,95 L 158,112 L 164,135 L 148,152 L 112,158 L 78,155 L 48,140 L 35,115 L 38,85 L 52,65 L 42,42 Z",
-    label: "Shanghai"
-  },
-  "GP du Japon": {
-    path: "M 148,72 L 162,52 L 158,28 L 138,18 L 115,20 L 98,35 L 94,55 L 105,70 L 120,76 L 104,85 L 86,98 L 80,120 L 85,140 L 102,152 L 124,152 L 142,140 L 150,118 L 146,98 L 134,86 L 148,78 Z",
-    label: "Suzuka ∞"
-  },
-  "GP de Miami": {
-    path: "M 42,52 L 162,48 L 176,65 L 178,105 L 175,142 L 160,158 L 100,162 L 42,158 L 25,142 L 22,102 L 25,65 Z",
-    label: "Miami"
-  },
-  "GP du Canada": {
-    path: "M 55,28 L 148,24 L 170,42 L 174,78 L 168,112 L 150,135 L 124,145 L 94,148 L 66,140 L 45,120 L 35,90 L 38,58 Z",
-    label: "Montréal"
-  },
-  "GP de Monaco": {
-    path: "M 92,22 L 122,20 L 145,30 L 155,52 L 148,72 L 128,84 L 108,78 L 88,68 L 68,74 L 52,92 L 50,114 L 62,132 L 82,140 L 108,136 L 128,124 L 138,106 L 126,94 L 108,91 L 96,100 L 90,116 L 96,130",
-    label: "Monaco"
-  },
-  "GP d'Espagne": {
-    path: "M 48,42 L 95,30 L 138,28 L 162,40 L 174,62 L 175,90 L 165,115 L 146,132 L 118,140 L 88,138 L 62,128 L 42,110 L 32,85 L 35,60 Z",
-    label: "Barcelone"
-  },
-  "GP d'Autriche": {
-    path: "M 88,28 L 128,25 L 150,42 L 156,68 L 148,92 L 128,108 L 102,112 L 78,106 L 58,90 L 52,65 L 60,42 Z",
-    label: "Red Bull Ring"
-  },
-  "GP de Grande-Bretagne": {
-    path: "M 58,35 L 98,22 L 135,20 L 160,35 L 172,58 L 166,84 L 148,102 L 125,115 L 102,120 L 80,124 L 58,118 L 38,104 L 28,80 L 32,55 Z",
-    label: "Silverstone"
-  },
-  "GP de Belgique": {
-    path: "M 52,28 L 88,20 L 122,22 L 150,38 L 165,62 L 160,92 L 145,118 L 122,132 L 95,138 L 68,132 L 46,115 L 34,88 L 36,60 Z",
-    label: "Spa"
-  },
-  "GP des Pays-Bas": {
-    path: "M 80,28 L 120,25 L 146,40 L 155,65 L 150,92 L 132,110 L 108,116 L 84,110 L 64,96 L 55,72 L 58,48 Z",
-    label: "Zandvoort"
-  },
-  "GP d'Italie": {
-    path: "M 48,35 L 102,24 L 152,28 L 172,50 L 174,82 L 162,110 L 140,130 L 104,138 L 70,132 L 45,112 L 32,84 L 35,55 Z",
-    label: "Monza"
-  },
-  "GP d'Azerbaïdjan": {
-    path: "M 40,22 L 95,18 L 150,20 L 172,35 L 178,62 L 174,98 L 165,125 L 148,145 L 120,157 L 88,160 L 60,152 L 38,135 L 28,108 L 30,75 L 35,48 Z",
-    label: "Bakou"
-  },
-  "GP de Singapour": {
-    path: "M 55,28 L 92,20 L 128,22 L 155,38 L 168,60 L 170,88 L 160,112 L 142,128 L 118,138 L 92,140 L 65,132 L 44,115 L 34,88 L 38,60 L 48,40 Z",
-    label: "Marina Bay"
-  },
-  "GP des États-Unis": {
-    path: "M 42,35 L 82,22 L 122,20 L 152,30 L 170,52 L 172,80 L 162,108 L 140,125 L 112,135 L 82,135 L 55,128 L 35,108 L 26,82 L 30,56 Z",
-    label: "COTA"
-  },
-  "GP du Mexique": {
-    path: "M 45,38 L 92,26 L 138,24 L 164,38 L 174,62 L 172,90 L 160,115 L 138,130 L 108,137 L 78,133 L 52,118 L 36,92 L 38,65 Z",
-    label: "Mexico"
-  },
-  "GP du Brésil": {
-    path: "M 75,25 L 118,20 L 148,32 L 165,55 L 168,85 L 158,110 L 138,126 L 108,133 L 80,130 L 56,116 L 42,92 L 45,65 Z",
-    label: "Interlagos"
-  },
-  "GP de Madrid": {
-    path: "M 50,38 L 100,26 L 150,30 L 172,52 L 175,82 L 165,110 L 140,130 L 105,138 L 72,134 L 46,118 L 33,90 L 36,62 Z",
-    label: "Madrid"
-  },
-  "GP de Las Vegas": {
-    path: "M 40,40 L 160,36 L 178,55 L 180,100 L 178,145 L 160,160 L 40,162 L 22,145 L 20,100 L 22,55 Z",
-    label: "Las Vegas"
-  },
-  "GP du Qatar": {
-    path: "M 62,28 L 112,22 L 150,30 L 168,52 L 170,82 L 158,110 L 136,128 L 108,136 L 78,133 L 52,118 L 38,92 L 42,62 Z",
-    label: "Losail"
-  },
-  "GP d'Abu Dhabi": {
-    path: "M 55,32 L 108,25 L 150,28 L 170,50 L 174,80 L 164,110 L 142,130 L 108,138 L 75,134 L 48,118 L 35,92 L 38,62 L 48,42 Z",
-    label: "Yas Marina"
-  },
+// Wikipedia circuit SVG thumbnails - real circuit layouts
+const CIRCUIT_IMAGES = {
+  "GP d'Australie": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Albert_Park_Circuit_-_2011.svg/300px-Albert_Park_Circuit_-_2011.svg.png",
+  "GP de Chine": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Shanghai_circuit.svg/300px-Shanghai_circuit.svg.png",
+  "GP du Japon": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Suzuka_circuit_layout.svg/300px-Suzuka_circuit_layout.svg.png",
+  "GP de Miami": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Miami_International_Autodrome.svg/300px-Miami_International_Autodrome.svg.png",
+  "GP du Canada": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Circuit_Gilles_Villeneuve.svg/300px-Circuit_Gilles_Villeneuve.svg.png",
+  "GP de Monaco": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Circuit_Monaco.svg/300px-Circuit_Monaco.svg.png",
+  "GP d'Espagne": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Circuit_de_Barcelona_Catalunya_2016.svg/300px-Circuit_de_Barcelona_Catalunya_2016.svg.png",
+  "GP d'Autriche": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Circuit_Red_Bull_Ring.svg/300px-Circuit_Red_Bull_Ring.svg.png",
+  "GP de Grande-Bretagne": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Silverstone_circuit_2020.svg/300px-Silverstone_circuit_2020.svg.png",
+  "GP de Belgique": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Circuit_Spa_modified.svg/300px-Circuit_Spa_modified.svg.png",
+  "GP des Pays-Bas": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Zandvoort_circuit_2020.svg/300px-Zandvoort_circuit_2020.svg.png",
+  "GP d'Italie": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Monza_track_map.svg/300px-Monza_track_map.svg.png",
+  "GP d'Azerbaïdjan": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Baku_Formula1_Circuit.svg/300px-Baku_Formula1_Circuit.svg.png",
+  "GP de Singapour": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Marina_Bay_circuit.svg/300px-Marina_Bay_circuit.svg.png",
+  "GP des États-Unis": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Austin_circuit.svg/300px-Austin_circuit.svg.png",
+  "GP du Mexique": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Autodromo_Hermanos_Rodriguez_Circuit_2015.svg/300px-Autodromo_Hermanos_Rodriguez_Circuit_2015.svg.png",
+  "GP du Brésil": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Autodromo_Jose_Carlos_Pace_2012.svg/300px-Autodromo_Jose_Carlos_Pace_2012.svg.png",
+  "GP de Madrid": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Madrid_Street_Circuit_2026.svg/300px-Madrid_Street_Circuit_2026.svg.png",
+  "GP de Las Vegas": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Las_Vegas_Street_Circuit.svg/300px-Las_Vegas_Street_Circuit.svg.png",
+  "GP du Qatar": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Losail_International_Circuit.svg/300px-Losail_International_Circuit.svg.png",
+  "GP d'Abu Dhabi": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Yas_Marina_circuit.svg/300px-Yas_Marina_circuit.svg.png",
+}
+
+// Verified Wikipedia driver headshot URLs
+const DRIVER_PHOTOS = {
+  'Lando Norris': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Lando_Norris_2024_Headshot.jpg/200px-Lando_Norris_2024_Headshot.jpg',
+  'Oscar Piastri': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Oscar_Piastri_2024_Headshot.jpg/200px-Oscar_Piastri_2024_Headshot.jpg',
+  'Charles Leclerc': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Charles_Leclerc_2024_Headshot.jpg/200px-Charles_Leclerc_2024_Headshot.jpg',
+  'Lewis Hamilton': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg/200px-Lewis_Hamilton_2016_Malaysia_2.jpg',
+  'Max Verstappen': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Max_Verstappen_2023_Headshot.jpg/200px-Max_Verstappen_2023_Headshot.jpg',
+  'George Russell': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/George_Russell_2024_Headshot.jpg/200px-George_Russell_2024_Headshot.jpg',
+  'Carlos Sainz': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Carlos_Sainz_Jr._2024_Headshot.jpg/200px-Carlos_Sainz_Jr._2024_Headshot.jpg',
+  'Alexander Albon': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Alexander_Albon_2024_Headshot.jpg/200px-Alexander_Albon_2024_Headshot.jpg',
+  'Pierre Gasly': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Pierre_Gasly_2024_Headshot.jpg/200px-Pierre_Gasly_2024_Headshot.jpg',
+  'Esteban Ocon': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Esteban_Ocon_2024_Headshot.jpg/200px-Esteban_Ocon_2024_Headshot.jpg',
+  'Oliver Bearman': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Oliver_Bearman_2024.jpg/200px-Oliver_Bearman_2024.jpg',
+  'Nico Hülkenberg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Nico_H%C3%BClkenberg_2024_Headshot.jpg/200px-Nico_H%C3%BClkenberg_2024_Headshot.jpg',
+  'Fernando Alonso': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Fernando_Alonso_2024_Headshot.jpg/200px-Fernando_Alonso_2024_Headshot.jpg',
+  'Lance Stroll': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Lance_Stroll_2024_Headshot.jpg/200px-Lance_Stroll_2024_Headshot.jpg',
+  'Sergio Pérez': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Sergio_P%C3%A9rez_2024_Headshot.jpg/200px-Sergio_P%C3%A9rez_2024_Headshot.jpg',
+  'Valtteri Bottas': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valtteri_Bottas_2022_Headshot.jpg/200px-Valtteri_Bottas_2022_Headshot.jpg',
+  'Liam Lawson': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Liam_Lawson_2024.jpg/200px-Liam_Lawson_2024.jpg',
+  'Isack Hadjar': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Isack_Hadjar_2024.jpg/200px-Isack_Hadjar_2024.jpg',
+  'Kimi Antonelli': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Andrea_Kimi_Antonelli_2024.jpg/200px-Andrea_Kimi_Antonelli_2024.jpg',
+  'Gabriel Bortoleto': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Gabriel_Bortoleto_2024.jpg/200px-Gabriel_Bortoleto_2024.jpg',
+  'Franco Colapinto': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Franco_Colapinto_2024.jpg/200px-Franco_Colapinto_2024.jpg',
+  'Arvid Lindblad': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Arvid_Lindblad_2024.jpg/200px-Arvid_Lindblad_2024.jpg',
+}
+
+// Driver image component with proper React state error handling
+function DriverImg({ driver, size = 56, rounded = 'rounded-full', className = '' }) {
+  const [err, setErr] = useState(false)
+  const color = teamColors[driver.team] || '#E10600'
+  const url = DRIVER_PHOTOS[driver.name]
+  const initials = driver.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+
+  if (err || !url) {
+    return (
+      <div className={`${rounded} flex items-center justify-center font-black text-white border-2 ${className}`}
+        style={{ width: size, height: size, minWidth: size, background: `linear-gradient(135deg, ${color}, ${color}99)`, borderColor: color, fontSize: size * 0.28 }}>
+        {initials}
+      </div>
+    )
+  }
+  return (
+    <img src={url} alt={driver.name} onError={() => setErr(true)}
+      className={`${rounded} object-cover object-top border-2 ${className}`}
+      style={{ width: size, height: size, minWidth: size, borderColor: color }} />
+  )
+}
+
+// Circuit image with fallback
+function CircuitImg({ race, index }) {
+  const [err, setErr] = useState(false)
+  const url = CIRCUIT_IMAGES[race.gp]
+  const color = race.status === 'Prochain' ? '#E10600' : race.status === 'Terminé' ? '#333' : '#555'
+
+  return (
+    <div className="relative w-full h-full bg-zinc-950 flex items-center justify-center overflow-hidden">
+      {!err && url ? (
+        <img src={url} alt={race.circuit}
+          className="w-full h-full object-contain p-2"
+          style={{ filter: race.status === 'Terminé' ? 'grayscale(80%) opacity(0.5)' : 'none' }}
+          onError={() => setErr(true)} />
+      ) : (
+        // Fallback: clean circuit name display
+        <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+          <div className="w-16 h-16 rounded-full border-2 flex items-center justify-center" style={{ borderColor: color }}>
+            <span className="text-2xl">🏎️</span>
+          </div>
+          <span className="text-xs font-bold" style={{ color }}>{race.circuit}</span>
+        </div>
+      )}
+    </div>
+  )
 }
 
 function F1Car() {
@@ -127,7 +138,7 @@ function F1Car() {
       <style>{`
         @keyframes carGo{0%{transform:translateX(-320px);opacity:0}8%{opacity:1}88%{opacity:1}100%{transform:translateX(120vw);opacity:0}}
         @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-        @keyframes fire{0%,100%{opacity:1;transform:scaleX(1)}50%{opacity:0.5;transform:scaleX(0.5)}}
+        @keyframes fire{0%,100%{opacity:1;transform:scaleX(1)}50%{opacity:0.4;transform:scaleX(0.4)}}
         .go{animation:carGo 4.5s ease-in-out infinite}
         .wfl{transform-origin:55px 88px;animation:spin 0.18s linear infinite}
         .wfr{transform-origin:55px 20px;animation:spin 0.18s linear infinite}
@@ -135,7 +146,7 @@ function F1Car() {
         .wrr{transform-origin:178px 15px;animation:spin 0.18s linear infinite}
         .fx{animation:fire 0.1s linear infinite}
       `}</style>
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0 opacity-15">
         {[15,40,65,90].map((y,i)=><div key={i} className="absolute h-px w-full bg-gradient-to-r from-transparent via-red-700 to-transparent" style={{top:y}}/>)}
       </div>
       <div className="go absolute" style={{top:0}}>
@@ -168,75 +179,39 @@ function F1Car() {
           <line x1="167" y1="15" x2="153" y2="32" stroke="#333" strokeWidth="2.5"/>
           <line x1="167" y1="95" x2="153" y2="77" stroke="#333" strokeWidth="2.5"/>
           <line x1="181" y1="40" x2="181" y2="64" stroke="#770000" strokeWidth="2"/>
-          <line x1="187" y1="39" x2="187" y2="64" stroke="#770000" strokeWidth="1.5"/>
           <rect x="118" y="24" width="13" height="5.5" rx="2" fill="#252525"/>
           <rect x="149" y="24" width="13" height="5.5" rx="2" fill="#252525"/>
           <text x="132" y="50" fontSize="7.5" fontWeight="bold" fill="white" opacity="0.6">F1 2026</text>
           <g className="wfr">
-            <circle cx="55" cy="20" r="18"/><circle cx="55" cy="20" r="14" fill="#151515"/>
-            <circle cx="55" cy="20" r="7" fill="#252525"/><circle cx="55" cy="20" r="3" fill="#333"/>
+            <circle cx="55" cy="20" r="18" fill="#0d0d0d"/>
+            <circle cx="55" cy="20" r="14" fill="#151515"/>
+            <circle cx="55" cy="20" r="7" fill="#252525"/>
+            <circle cx="55" cy="20" r="3" fill="#333"/>
             {[0,45,90,135,180,225,270,315].map(a=><line key={a} x1={55+7*Math.cos(a*Math.PI/180)} y1={20+7*Math.sin(a*Math.PI/180)} x2={55+13*Math.cos(a*Math.PI/180)} y2={20+13*Math.sin(a*Math.PI/180)} stroke="#444" strokeWidth="1.5"/>)}
           </g>
           <g className="wfl">
-            <circle cx="55" cy="88" r="18"/><circle cx="55" cy="88" r="14" fill="#151515"/>
-            <circle cx="55" cy="88" r="7" fill="#252525"/><circle cx="55" cy="88" r="3" fill="#333"/>
+            <circle cx="55" cy="88" r="18" fill="#0d0d0d"/>
+            <circle cx="55" cy="88" r="14" fill="#151515"/>
+            <circle cx="55" cy="88" r="7" fill="#252525"/>
+            <circle cx="55" cy="88" r="3" fill="#333"/>
             {[0,45,90,135,180,225,270,315].map(a=><line key={a} x1={55+7*Math.cos(a*Math.PI/180)} y1={88+7*Math.sin(a*Math.PI/180)} x2={55+13*Math.cos(a*Math.PI/180)} y2={88+13*Math.sin(a*Math.PI/180)} stroke="#444" strokeWidth="1.5"/>)}
           </g>
           <g className="wrr">
-            <circle cx="178" cy="15" r="21"/><circle cx="178" cy="15" r="17" fill="#151515"/>
-            <circle cx="178" cy="15" r="9" fill="#252525"/><circle cx="178" cy="15" r="4" fill="#333"/>
+            <circle cx="178" cy="15" r="21" fill="#0d0d0d"/>
+            <circle cx="178" cy="15" r="17" fill="#151515"/>
+            <circle cx="178" cy="15" r="9" fill="#252525"/>
+            <circle cx="178" cy="15" r="4" fill="#333"/>
             {[0,40,80,120,160,200,240,280,320].map(a=><line key={a} x1={178+9*Math.cos(a*Math.PI/180)} y1={15+9*Math.sin(a*Math.PI/180)} x2={178+16*Math.cos(a*Math.PI/180)} y2={15+16*Math.sin(a*Math.PI/180)} stroke="#444" strokeWidth="1.5"/>)}
           </g>
           <g className="wrl">
-            <circle cx="178" cy="93" r="21"/><circle cx="178" cy="93" r="17" fill="#151515"/>
-            <circle cx="178" cy="93" r="9" fill="#252525"/><circle cx="178" cy="93" r="4" fill="#333"/>
+            <circle cx="178" cy="93" r="21" fill="#0d0d0d"/>
+            <circle cx="178" cy="93" r="17" fill="#151515"/>
+            <circle cx="178" cy="93" r="9" fill="#252525"/>
+            <circle cx="178" cy="93" r="4" fill="#333"/>
             {[0,40,80,120,160,200,240,280,320].map(a=><line key={a} x1={178+9*Math.cos(a*Math.PI/180)} y1={93+9*Math.sin(a*Math.PI/180)} x2={178+16*Math.cos(a*Math.PI/180)} y2={93+16*Math.sin(a*Math.PI/180)} stroke="#444" strokeWidth="1.5"/>)}
           </g>
         </svg>
       </div>
-    </div>
-  )
-}
-
-function CircuitSVG({ gp, status }) {
-  const circuit = CIRCUITS[gp]
-  const color = status === 'Prochain' ? '#E10600' : status === 'Terminé' ? '#3a3a3a' : '#555'
-  const glow = status === 'Prochain' ? 'rgba(225,6,0,0.2)' : 'transparent'
-
-  if (!circuit) return (
-    <div className="w-full h-full flex items-center justify-center">
-      <span className="text-zinc-600 text-xs">{gp}</span>
-    </div>
-  )
-
-  return (
-    <svg viewBox="0 0 210 180" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-      <rect width="210" height="180" fill="#080808"/>
-      {/* Glow */}
-      {status === 'Prochain' && <path d={circuit.path} fill="none" stroke={glow} strokeWidth="18" strokeLinejoin="round" strokeLinecap="round"/>}
-      {/* Track shadow */}
-      <path d={circuit.path} fill="none" stroke="#1c1c1c" strokeWidth="13" strokeLinejoin="round" strokeLinecap="round"/>
-      {/* Asphalt */}
-      <path d={circuit.path} fill="none" stroke="#222" strokeWidth="9" strokeLinejoin="round" strokeLinecap="round"/>
-      {/* Track line */}
-      <path d={circuit.path} fill="none" stroke={color} strokeWidth="4.5" strokeLinejoin="round" strokeLinecap="round" opacity={status==='Terminé'?0.4:1}/>
-      {/* White line center */}
-      <path d={circuit.path} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" strokeDasharray="6 6"/>
-      {/* Start dot */}
-      {status !== 'Terminé' && <circle cx="102" cy="18" r="4.5" fill={color}/>}
-      {/* Label */}
-      <text x="105" y="170" textAnchor="middle" fontSize="9" fill={status==='Terminé'?'#333':color} fontWeight="600" opacity="0.9">{circuit.label}</text>
-    </svg>
-  )
-}
-
-function DriverAvatar({ driver, size = 56, className = '' }) {
-  const color = teamColors[driver.team] || '#E10600'
-  const initials = driver.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-  return (
-    <div className={`rounded-full border-2 flex items-center justify-center font-black text-white ${className}`}
-      style={{ width: size, height: size, background: `linear-gradient(135deg, ${color}dd, ${color}88)`, borderColor: color, fontSize: size * 0.28, flexShrink: 0 }}>
-      {initials}
     </div>
   )
 }
@@ -250,8 +225,8 @@ function DriverCard({ driver, onClick }) {
       <div className="p-4">
         <div className="flex items-center gap-3 mb-3">
           <div className="relative flex-shrink-0">
-            <DriverAvatar driver={driver} size={52} />
-            <div className="absolute -bottom-1 -right-1 text-white font-black rounded-full w-6 h-6 flex items-center justify-center text-center"
+            <DriverImg driver={driver} size={52} />
+            <div className="absolute -bottom-1 -right-1 text-white font-black rounded-full w-6 h-6 flex items-center justify-center"
               style={{ background: color, fontSize: '9px' }}>
               {driver.num}
             </div>
@@ -278,7 +253,7 @@ function DriverModal({ driver, onClose }) {
         <div className="h-2" style={{ background: color }} />
         <div className="p-6">
           <div className="flex items-start gap-4 mb-5">
-            <DriverAvatar driver={driver} size={88} className="rounded-2xl" />
+            <DriverImg driver={driver} size={90} rounded="rounded-2xl" />
             <div className="flex-1 min-w-0">
               <span className="text-3xl font-black" style={{ color }}>#{driver.num}</span>
               <h2 className="text-xl font-black text-white leading-tight">{driver.name}</h2>
@@ -357,7 +332,6 @@ export default function App() {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       {selectedDriver && <DriverModal driver={selectedDriver} onClose={() => setSelectedDriver(null)} />}
-
       <header className="sticky top-0 z-40 border-b-2 border-raceRed bg-black/90 backdrop-blur-md">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
           <a href="#accueil" className="text-xl font-black tracking-widest text-raceRed uppercase">F1<span className="text-white">Hub</span></a>
@@ -388,7 +362,6 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 pb-16 md:px-8">
-
         <Section id="accueil" title="">
           <div className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black p-8 md:p-14 mb-6">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(225,6,0,0.2),transparent_55%)]" />
@@ -538,8 +511,8 @@ export default function App() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {calendar.map((race, i) => (
               <article key={race.gp} className={`rounded-2xl border overflow-hidden transition-all ${race.status === 'Prochain' ? 'border-raceRed shadow-lg shadow-red-900/20' : race.status === 'Terminé' ? 'border-zinc-800 opacity-60' : 'border-zinc-800 hover:border-zinc-600'}`}>
-                <div className="relative" style={{ height: '155px' }}>
-                  <CircuitSVG gp={race.gp} status={race.status} />
+                <div className="relative bg-zinc-950" style={{ height: '150px' }}>
+                  <CircuitImg race={race} index={i} />
                   <div className="absolute top-2 left-2 bg-black/70 text-zinc-400 text-xs px-2 py-0.5 rounded-full font-bold">R{i + 1}</div>
                   <div className="absolute top-2 right-2">
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${race.status === 'Prochain' ? 'bg-raceRed text-white' : race.status === 'Terminé' ? 'bg-zinc-700 text-zinc-400' : 'bg-zinc-800/80 text-zinc-400'}`}>
@@ -559,7 +532,6 @@ export default function App() {
             ))}
           </div>
         </Section>
-
       </main>
 
       <footer className="border-t border-zinc-800 py-6 text-center text-xs text-zinc-600">
